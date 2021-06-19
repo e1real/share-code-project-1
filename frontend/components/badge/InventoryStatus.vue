@@ -1,0 +1,63 @@
+<template>
+  <div class="inventory-status-wrapper">
+    <div :class="['inventory-status', `inventory-status--${status}`]">
+      <div class="inventory-status__icon">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7.99967 1.33333C4.33301 1.33333 1.33301 4.33333 1.33301 8C1.33301 11.6667 4.33301 14.6667 7.99967 14.6667C11.6663 14.6667 14.6663 11.6667 14.6663 8C14.6663 4.33333 11.6663 1.33333 7.99967 1.33333ZM7.99967 13.3333C5.05967 13.3333 2.66634 10.94 2.66634 8C2.66634 5.06 5.05967 2.66667 7.99967 2.66667C10.9397 2.66667 13.333 5.06 13.333 8C13.333 10.94 10.9397 13.3333 7.99967 13.3333ZM11.0597 5.05333L6.66634 9.44667L4.93967 7.72667L3.99967 8.66667L6.66634 11.3333L11.9997 6L11.0597 5.05333Z"
+            fill="WHITE"
+          />
+        </svg>
+      </div>
+      <div class="inventory-status__text">
+        Status: <b>{{ status }}</b>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  props: {
+    status: {
+      type: String,
+      default: 'Online',
+    },
+  },
+}
+</script>
+<style lang="scss" scoped>
+.inventory-status {
+  display: flex;
+  align-items: center;
+  background: #e6f9f4;
+  flex-direction: row;
+  width: 141px;
+  height: 40px;
+  border-radius: 8px;
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    background: #00bc8a;
+    display: flex;
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+  }
+  &__text {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 100%;
+    color: #000638;
+  }
+}
+</style>
