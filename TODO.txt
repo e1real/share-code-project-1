@@ -1,0 +1,2 @@
+1. Make validate many to many relations https://stackoverflow.com/questions/29811833/laravel-5-validate-many-to-many-data
+2.

@@ -1,0 +1,77 @@
+version: '3.7'
+services:
+  frontend:
+    image: node:14
+    container_name: frontend
+    working_dir: /usr/src/frontend-app
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./frontend:/usr/src/frontend-app
+    command: bash -c "yarn && yarn run build && yarn run start"
+    networks:
+      - app-network
+  backend:
+    build:
+      args:
+        user: laravel
+        uid: 1000
+      context: ./
+    container_name: backend
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./deployment/local/php/php-local.ini:/usr/local/etc/php/conf.d/php-local.ini
+    networks:
+      - app-network
+  composer:
+    container_name: composer
+    image: composer
+    command: /bin/bash "/app/deployment/local/commands/start-composer.sh"
+    depends_on:
+      - backend
+    volumes:
+      - ./:/app
+    networks:
+      - app-network
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8089:80"
+      - "44389:443"
+    depends_on:
+      - backend
+    volumes:
+      - ./:/var/www
+      - ./deployment/local/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+  db:
+    image: mysql:8
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: oohboard-new
+      MYSQL_ROOT_PASSWORD: Nokia6300!
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - db_data:/var/lib/mysql/
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  db_data:
+    driver: local
